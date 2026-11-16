@@ -8,7 +8,7 @@ export const COACH_TIPS: CoachTip[] = [
   {
     id: 'order',
     title: 'Best order after wake',
-    body: 'Water → breakfast if hungry → rest ~60 min → scoop → lift → lunch → scoops/meals through the day → night scoop → sleep. Hungry at wake = food before scoop.',
+    body: 'Wake → bathroom → weigh → water → breakfast → brush teeth + morning face wash → rest ~60 min → scoop → lift → lunch → scoops/meals through the day → night scoop → night face → sleep. Hungry at wake = food before scoop.',
   },
   {
     id: 'scoops',

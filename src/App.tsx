@@ -551,7 +551,7 @@ export default function App() {
             <h2>Skincare / Hygiene</h2>
             {(
               [
-                ['am', 'Morning Face (Cleanse + Moisturize)'],
+                ['am', 'Morning Face (After Breakfast + Brush Teeth)'],
                 ['shower', 'Post-Lift Shower'],
                 ['pm', 'Night Face (Cleanse + Moisturize)'],
               ] as const
