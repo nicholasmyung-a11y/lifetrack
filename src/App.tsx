@@ -95,7 +95,7 @@ export default function App() {
       updatedAtRef.current = ts
       saveLocalUpdatedAt(ts)
       try {
-        setSyncStatus('Syncing…') // status pill
+        setSyncStatus('Syncing…')
         const result = await pushSync(syncCode, nextLogs, ts)
         if (result.updatedAt && result.updatedAt !== ts) {
           // Server had newer or merged response
