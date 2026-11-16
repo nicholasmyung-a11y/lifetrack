@@ -196,6 +196,8 @@ export default function App() {
   const suppCount =
     Number(log.supplements.multi) +
     Number(log.supplements.immune) +
+    Number(log.supplements.turmeric) +
+    Number(log.supplements.testComplex) +
     Number(log.supplements.creatine)
   const studyCount = countTrue(log.study)
   const skinCount =
@@ -474,6 +476,8 @@ export default function App() {
               [
                 ['multi', 'Multivitamin (1 tablet)'],
                 ['immune', 'Immune Softgels (optional)'],
+                ['turmeric', 'Turmeric + Ginger'],
+                ['testComplex', 'Testosterone Complex'],
                 ['creatine', 'Creatine 3–5g'],
               ] as const
             ).map(([key, label]) => (
@@ -486,6 +490,8 @@ export default function App() {
                       supplements: {
                         multi: Boolean(log.supplements.multi),
                         immune: Boolean(log.supplements.immune),
+                        turmeric: Boolean(log.supplements.turmeric),
+                        testComplex: Boolean(log.supplements.testComplex),
                         creatine: Boolean(log.supplements.creatine),
                         [key]: e.target.checked,
                       },
@@ -496,7 +502,7 @@ export default function App() {
               </label>
             ))}
             <p className="hint">
-              Skip turmeric + test booster · {suppCount}/3 checked
+              What you own · tracking only · {suppCount}/5 checked
             </p>
           </section>
 

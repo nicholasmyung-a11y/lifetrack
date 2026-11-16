@@ -13,6 +13,8 @@ export type DayLog = {
   supplements: {
     multi: boolean
     immune: boolean
+    turmeric: boolean
+    testComplex: boolean
     creatine: boolean
   }
   waterLiters: number

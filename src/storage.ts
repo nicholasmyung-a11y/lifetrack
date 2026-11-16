@@ -17,6 +17,8 @@ export function emptyLog(date: string): DayLog {
     supplements: {
       multi: false,
       immune: false,
+      turmeric: false,
+      testComplex: false,
       creatine: false,
     },
     waterLiters: 0,
@@ -31,6 +33,8 @@ function normalizeSupplements(raw: unknown): DayLog['supplements'] {
   return {
     multi: Boolean(s.multi),
     immune: Boolean(s.immune),
+    turmeric: Boolean(s.turmeric),
+    testComplex: Boolean(s.testComplex),
     creatine: Boolean(s.creatine),
   }
 }
