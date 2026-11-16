@@ -78,14 +78,47 @@ button {
   gap: 0;
 }
 
-.sync-code-display {
-  margin: 8px 0 0;
-  font-size: 0.95rem;
+.sync-card {
+  padding: 0;
+  overflow: hidden;
 }
 
-.sync-code-display strong {
+.sync-card.collapsed {
+  margin-bottom: 12px;
+}
+
+.sync-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.sync-toggle-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
   font-family: var(--display);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
+}
+
+.sync-chevron {
+  font-family: var(--font);
+  letter-spacing: 0;
+}
+
+.sync-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--stroke);
+  padding-top: 12px;
 }
 
 @media (min-width: 900px) {

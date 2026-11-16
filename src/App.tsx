@@ -46,6 +46,7 @@ export default function App() {
   const [syncStatus, setSyncStatus] = useState('Not Linked')
   const [syncBusy, setSyncBusy] = useState(false)
   const [openTip, setOpenTip] = useState<string | null>(COACH_TIPS[0]?.id ?? null)
+  const [syncOpen, setSyncOpen] = useState(false)
   const updatedAtRef = useRef(loadLocalUpdatedAt())
   const skipNextPush = useRef(false)
 
@@ -233,57 +234,9 @@ export default function App() {
         <header className="brand">
           <h1>LifeTrack</h1>
           <p>
-            {isPc ? 'PC Dashboard' : 'Phone Tracker'} · Scoops, Meals, Lifts, Sync
+            {isPc ? 'PC Dashboard' : 'Phone Tracker'} · Scoops, Meals, Lifts
           </p>
         </header>
-
-        <section className="card sync-card">
-          <h2>Phone ↔ PC Sync</h2>
-          <p className="hint" style={{ marginTop: 0 }}>
-            Create A Code On One Device, Enter The Same Code On The Other. Both Stay Linked.
-          </p>
-          <div className="field">
-            <label htmlFor="sync">Sync code</label>
-            <input
-              id="sync"
-              value={syncInput}
-              onChange={(e) => setSyncInput(e.target.value.toUpperCase())}
-              autoCapitalize="characters"
-            />
-          </div>
-          <div className="row">
-            {!syncCode ? (
-              <>
-                <button className="btn primary" type="button" onClick={createSync}>
-                  Create Code
-                </button>
-                <button className="btn" type="button" onClick={joinSync}>
-                  Join Code
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="btn primary"
-                  type="button"
-                  disabled={syncBusy}
-                  onClick={() => void refreshFromCloud()}
-                >
-                  Sync Now
-                </button>
-                <button className="btn ghost" type="button" onClick={unlinkSync}>
-                  Unlink
-                </button>
-              </>
-            )}
-          </div>
-          <p className="hint">{titleCaseWords(syncStatus)}</p>
-          {syncCode ? (
-            <p className="sync-code-display">
-              Linked: <strong>{syncCode}</strong>
-            </p>
-          ) : null}
-        </section>
 
         {installEvent ? (
           <div className="install">
@@ -327,6 +280,63 @@ export default function App() {
             <span>Water</span>
           </div>
         </div>
+
+        <section className={`card sync-card ${syncOpen ? 'open' : 'collapsed'}`}>
+          <button
+            type="button"
+            className="sync-toggle"
+            onClick={() => setSyncOpen((v) => !v)}
+            aria-expanded={syncOpen}
+          >
+            <span>Phone ↔ PC Sync</span>
+            <span className="sync-toggle-meta">
+              {syncCode ? syncCode : 'Off'}
+              <span className="sync-chevron" aria-hidden>
+                {syncOpen ? '▾' : '▸'}
+              </span>
+            </span>
+          </button>
+          {syncOpen ? (
+            <div className="sync-body">
+              <div className="field">
+                <label htmlFor="sync">Sync Code</label>
+                <input
+                  id="sync"
+                  value={syncInput}
+                  onChange={(e) => setSyncInput(e.target.value.toUpperCase())}
+                  autoCapitalize="characters"
+                />
+              </div>
+              <div className="row">
+                {!syncCode ? (
+                  <>
+                    <button className="btn primary" type="button" onClick={createSync}>
+                      Create Code
+                    </button>
+                    <button className="btn" type="button" onClick={joinSync}>
+                      Join Code
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="btn primary"
+                      type="button"
+                      disabled={syncBusy}
+                      onClick={() => void refreshFromCloud()}
+                    >
+                      Sync Now
+                    </button>
+                    <button className="btn ghost" type="button" onClick={unlinkSync}>
+                      Unlink
+                    </button>
+                  </>
+                )}
+              </div>
+              <p className="hint">{titleCaseWords(syncStatus)}</p>
+            </div>
+          ) : null}
+        </section>
       </aside>
 
       <main className="app">
