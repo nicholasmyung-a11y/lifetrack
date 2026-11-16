@@ -11,6 +11,7 @@ import {
   saveLocalUpdatedAt,
   saveSyncCode,
 } from './sync'
+import { COACH_TIPS } from './coachTips'
 import type { DayLog, WorkoutKind } from './types'
 
 type BeforeInstallPromptEvent = Event & {
@@ -32,6 +33,7 @@ export default function App() {
   const [syncInput, setSyncInput] = useState(() => loadSyncCode())
   const [syncStatus, setSyncStatus] = useState('Not linked')
   const [syncBusy, setSyncBusy] = useState(false)
+  const [openTip, setOpenTip] = useState<string | null>(COACH_TIPS[0]?.id ?? null)
   const updatedAtRef = useRef(loadLocalUpdatedAt())
   const skipNextPush = useRef(false)
 
@@ -249,7 +251,6 @@ export default function App() {
               id="sync"
               value={syncInput}
               onChange={(e) => setSyncInput(e.target.value.toUpperCase())}
-              placeholder="ABC123"
               autoCapitalize="characters"
             />
           </div>
@@ -382,8 +383,8 @@ export default function App() {
                 inputMode="decimal"
                 value={log.weight}
                 onChange={(e) => updateLog({ weight: e.target.value })}
-                placeholder="122"
               />
+              <p className="hint">Your number for this day. Saves with the checklist.</p>
             </div>
             <div className="field">
               <label htmlFor="wake">Wake time</label>
@@ -391,8 +392,8 @@ export default function App() {
                 id="wake"
                 value={log.wakeTime}
                 onChange={(e) => updateLog({ wakeTime: e.target.value })}
-                placeholder="11:00am"
               />
+              <p className="hint">Optional — when you got up. Leave blank if you want.</p>
             </div>
             {weekday === 'Sunday' ? (
               <p className="hint">Sunday weigh-in: after bathroom, before a huge meal.</p>
@@ -620,8 +621,31 @@ export default function App() {
               id="notes"
               value={log.notes}
               onChange={(e) => updateLog({ notes: e.target.value })}
-              placeholder="Sleep, gut, energy, nightlife, what felt hard…"
             />
+          </div>
+        </section>
+
+        <section className="card coach-card">
+          <h2>Coach Tips</h2>
+          <p className="hint" style={{ marginTop: 0 }}>
+            Free built-in tips from your plan — tap one to open.
+          </p>
+          <div className="coach-list">
+            {COACH_TIPS.map((tip) => {
+              const open = openTip === tip.id
+              return (
+                <div key={tip.id} className={`coach-item ${open ? 'open' : ''}`}>
+                  <button
+                    type="button"
+                    className="coach-q"
+                    onClick={() => setOpenTip(open ? null : tip.id)}
+                  >
+                    {tip.title}
+                  </button>
+                  {open ? <p className="coach-a">{tip.body}</p> : null}
+                </div>
+              )
+            })}
           </div>
         </section>
 
