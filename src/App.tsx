@@ -368,7 +368,7 @@ export default function App() {
           <section className="card">
             <h2>Body</h2>
             <div className="field">
-              <label htmlFor="weight">Weight (Lb)</label>
+              <label htmlFor="weight">Weight (lb)</label>
               <input
                 id="weight"
                 inputMode="decimal"
@@ -377,9 +377,9 @@ export default function App() {
               />
             </div>
             <div className="field">
+              <label htmlFor="wake">Wake Time</label>
               <input
                 id="wake"
-                aria-label="Wake Time"
                 value={log.wakeTime}
                 onChange={(e) => updateLog({ wakeTime: e.target.value })}
               />
