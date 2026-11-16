@@ -22,13 +22,13 @@ export const COACH_TIPS: CoachTip[] = [
   },
   {
     id: 'weight',
-    title: 'Weight box',
-    body: 'Type your scale number for that day (Sunday weigh-in is the main one). It’s just a log — nothing auto-calculates from it.',
+    title: 'When to weigh',
+    body: 'Once per day max. After wake → bathroom → weigh → then food/scoops. Same conditions every time. Sunday is the main weekly log. Ignore 1–3 lb daily swings — track the weekly trend.',
   },
   {
     id: 'wake',
     title: 'Wake time box',
-    body: 'Optional note of when you got up (e.g. 11:00am). Helps you see sleep patterns. Leave blank if you don’t care.',
+    body: 'Optional note of when you got up. Helps you see sleep patterns. Leave blank if you don’t care.',
   },
   {
     id: 'sleep',

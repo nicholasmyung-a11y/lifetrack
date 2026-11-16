@@ -384,7 +384,9 @@ export default function App() {
                 value={log.weight}
                 onChange={(e) => updateLog({ weight: e.target.value })}
               />
-              <p className="hint">Your number for this day. Saves with the checklist.</p>
+              <p className="hint">
+                Once a day · after wake · bathroom first · before food/scoops.
+              </p>
             </div>
             <div className="field">
               <label htmlFor="wake">Wake time</label>
@@ -393,10 +395,10 @@ export default function App() {
                 value={log.wakeTime}
                 onChange={(e) => updateLog({ wakeTime: e.target.value })}
               />
-              <p className="hint">Optional — when you got up. Leave blank if you want.</p>
+              <p className="hint">Optional — when you got up.</p>
             </div>
             {weekday === 'Sunday' ? (
-              <p className="hint">Sunday weigh-in: after bathroom, before a huge meal.</p>
+              <p className="hint">Sunday = main weekly weigh-in. Log the morning number.</p>
             ) : null}
           </section>
 
