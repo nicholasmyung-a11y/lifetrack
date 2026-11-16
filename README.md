@@ -31,12 +31,30 @@ Must be HTTPS (or localhost):
 - **iPhone (Safari):** Share → Add to Home Screen  
 - **Android (Chrome):** Install app / Add to Home Screen  
 
-## Deploy
+## Deploy (permanent — PC can stay off)
 
-Needs the Node server (not static-only hosting) so `/api/sync` works:
+Needs the Node server so `/api/sync` works. **Render free tier** is the easiest.
 
-- Railway / Render / Fly.io / any Node host
-- Start command: `npm run serve` (or `npm run build && npm start`)
-- Port: `PORT` env or `4173`
+### Render (recommended)
 
-Static hosts (plain Netlify/GitHub Pages) will run the UI but **not** cross-device sync unless you add a separate sync API.
+1. Push this folder to a GitHub repo
+2. Go to [https://render.com](https://render.com) → sign up free (GitHub login is fine)
+3. **New** → **Blueprint** (uses `render.yaml`) **or** **Web Service**
+4. If Web Service manually:
+   - Build: `npm ci && npm run build`
+   - Start: `npm start`
+   - Health check: `/api/health`
+5. After deploy, open your `https://….onrender.com` URL on phone + PC
+6. Create a sync code on one device, join on the other
+7. Phone: Safari/Chrome → Add to Home Screen
+
+Free Render apps may sleep after idle; first open can take ~30s, then sync works again.
+
+### Other hosts
+
+Railway / Fly.io / any Node host:
+
+- `npm run build && npm start`
+- Port: `PORT` env (Render/Railway set this automatically)
+
+Static-only hosts (plain Netlify/GitHub Pages) run the UI but **not** sync.
