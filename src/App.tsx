@@ -23,6 +23,18 @@ function countTrue(flags: boolean[]) {
   return flags.filter(Boolean).length
 }
 
+function titleCaseWords(text: string) {
+  return text
+    .split(' ')
+    .map((word) => {
+      if (!word) return word
+      if (word === '·' || word === '↔' || word === '/') return word
+      if (/^[A-Z0-9]+$/.test(word)) return word
+      return word.charAt(0).toUpperCase() + word.slice(1)
+    })
+    .join(' ')
+}
+
 export default function App() {
   const today = useMemo(() => hawaiiDateString(), [])
   const [activeDate, setActiveDate] = useState(today)
@@ -31,7 +43,7 @@ export default function App() {
   const [installHint, setInstallHint] = useState(false)
   const [syncCode, setSyncCode] = useState(() => loadSyncCode())
   const [syncInput, setSyncInput] = useState(() => loadSyncCode())
-  const [syncStatus, setSyncStatus] = useState('Not linked')
+  const [syncStatus, setSyncStatus] = useState('Not Linked')
   const [syncBusy, setSyncBusy] = useState(false)
   const [openTip, setOpenTip] = useState<string | null>(COACH_TIPS[0]?.id ?? null)
   const updatedAtRef = useRef(loadLocalUpdatedAt())
@@ -83,7 +95,7 @@ export default function App() {
       updatedAtRef.current = ts
       saveLocalUpdatedAt(ts)
       try {
-        setSyncStatus('Syncing…')
+        setSyncStatus('Syncing…') // status pill
         const result = await pushSync(syncCode, nextLogs, ts)
         if (result.updatedAt && result.updatedAt !== ts) {
           // Server had newer or merged response
@@ -94,7 +106,7 @@ export default function App() {
         }
         setSyncStatus(`Synced · ${syncCode}`)
       } catch {
-        setSyncStatus('Sync offline — will retry')
+        setSyncStatus('Sync Offline — Will Retry')
       }
     },
     [syncCode],
@@ -123,10 +135,10 @@ export default function App() {
         await pushSync(syncCode, logs, updatedAtRef.current || Date.now())
         setSyncStatus(`Linked · ${syncCode}`)
       } else {
-        setSyncStatus(`Up to date · ${syncCode}`)
+        setSyncStatus(`Up To Date · ${syncCode}`)
       }
     } catch {
-      setSyncStatus('Could not reach sync server')
+      setSyncStatus('Could Not Reach Sync Server')
     } finally {
       setSyncBusy(false)
     }
@@ -168,7 +180,7 @@ export default function App() {
     const saved = saveSyncCode(code)
     setSyncCode(saved)
     setSyncInput(saved)
-    setSyncStatus(`Created · enter ${saved} on your other device`)
+    setSyncStatus(`Created · Enter ${saved} On Your Other Device`)
     const ts = Date.now()
     updatedAtRef.current = ts
     saveLocalUpdatedAt(ts)
@@ -178,7 +190,7 @@ export default function App() {
   function joinSync() {
     const saved = saveSyncCode(syncInput)
     if (!saved) {
-      setSyncStatus('Enter a valid code')
+      setSyncStatus('Enter A Valid Code')
       return
     }
     setSyncCode(saved)
@@ -189,30 +201,15 @@ export default function App() {
     saveSyncCode('')
     setSyncCode('')
     setSyncInput('')
-    setSyncStatus('Not linked')
+    setSyncStatus('Not Linked')
   }
 
   const scoopCount = countTrue(log.scoops)
   const mealCount =
     Number(log.meals.breakfast) + Number(log.meals.lunch) + Number(log.meals.dinner)
-  const suppCount =
-    Number(log.supplements.multi) +
-    Number(log.supplements.immune) +
-    Number(log.supplements.turmeric) +
-    Number(log.supplements.testComplex) +
-    Number(log.supplements.creatine)
   const studyCount = countTrue(log.study)
   const skinCount =
     Number(log.skincare.am) + Number(log.skincare.pm) + Number(log.skincare.shower)
-
-  const coreDone =
-    scoopCount +
-    mealCount +
-    (log.workoutDone || log.workout === 'none' ? 1 : 0) +
-    Number(log.skincare.am) +
-    Number(log.supplements.multi)
-  const coreTotal = 10
-  const dayPct = Math.round((coreDone / coreTotal) * 100)
 
   const recentWeights = Object.values(logs)
     .filter((l) => l.weight.trim() !== '')
@@ -221,14 +218,14 @@ export default function App() {
 
   const workoutBlurb =
     log.workout === 'A'
-      ? 'Push-ups, shoulder press, goblet squat, RDL'
+      ? 'Push-Ups, Shoulder Press, Goblet Squat, RDL'
       : log.workout === 'B'
-        ? 'Rows, rear-delt fly, lunge/split squat, glute bridge'
+        ? 'Rows, Rear-Delt Fly, Lunge/Split Squat, Glute Bridge'
         : log.workout === 'full'
-          ? 'Full-body all-around session'
+          ? 'Full-Body All-Around Session'
           : log.workout === 'optional'
-            ? 'Short pump or skip'
-            : 'Rest — food and scoops still count'
+            ? 'Short Pump Or Skip'
+            : 'Rest — Food And Scoops Still Count'
 
   return (
     <div className={`shell ${isPc ? 'is-pc' : ''}`}>
@@ -236,14 +233,14 @@ export default function App() {
         <header className="brand">
           <h1>LifeTrack</h1>
           <p>
-            {isPc ? 'PC dashboard' : 'Phone tracker'} · scoops, meals, lifts, sync
+            {isPc ? 'PC Dashboard' : 'Phone Tracker'} · Scoops, Meals, Lifts, Sync
           </p>
         </header>
 
         <section className="card sync-card">
           <h2>Phone ↔ PC Sync</h2>
           <p className="hint" style={{ marginTop: 0 }}>
-            Create a code on one device, enter the same code on the other. Both stay linked.
+            Create A Code On One Device, Enter The Same Code On The Other. Both Stay Linked.
           </p>
           <div className="field">
             <label htmlFor="sync">Sync code</label>
@@ -280,7 +277,7 @@ export default function App() {
               </>
             )}
           </div>
-          <p className="hint">{syncStatus}</p>
+          <p className="hint">{titleCaseWords(syncStatus)}</p>
           {syncCode ? (
             <p className="sync-code-display">
               Linked: <strong>{syncCode}</strong>
@@ -365,41 +362,28 @@ export default function App() {
               Reset Day
             </button>
           </div>
-          <div className="progress" aria-label={`Day progress ${dayPct}%`}>
-            <i style={{ width: `${dayPct}%` }} />
-          </div>
-          <p className="hint">
-            Core day {coreDone}/{coreTotal} · {dayPct}%
-          </p>
         </section>
 
         <div className="desktop-grid">
           <section className="card">
             <h2>Body</h2>
             <div className="field">
-              <label htmlFor="weight">Weight (lb)</label>
+              <label htmlFor="weight">Weight (Lb)</label>
               <input
                 id="weight"
                 inputMode="decimal"
                 value={log.weight}
                 onChange={(e) => updateLog({ weight: e.target.value })}
               />
-              <p className="hint">
-                Once a day · after wake · bathroom first · before food/scoops.
-              </p>
             </div>
             <div className="field">
-              <label htmlFor="wake">Wake time</label>
               <input
                 id="wake"
+                aria-label="Wake Time"
                 value={log.wakeTime}
                 onChange={(e) => updateLog({ wakeTime: e.target.value })}
               />
-              <p className="hint">Optional — when you got up.</p>
             </div>
-            {weekday === 'Sunday' ? (
-              <p className="hint">Sunday = main weekly weigh-in. Log the morning number.</p>
-            ) : null}
           </section>
 
           <section className="card">
@@ -504,9 +488,6 @@ export default function App() {
                 <span>{label}</span>
               </label>
             ))}
-            <p className="hint">
-              What you own · tracking only · {suppCount}/5 checked
-            </p>
           </section>
 
           <section className="card">
@@ -618,7 +599,7 @@ export default function App() {
         <section className="card">
           <h2>Notes</h2>
           <div className="field">
-            <label htmlFor="notes">Day notes</label>
+            <label htmlFor="notes">Day Notes</label>
             <textarea
               id="notes"
               value={log.notes}
@@ -630,7 +611,7 @@ export default function App() {
         <section className="card coach-card">
           <h2>Coach Tips</h2>
           <p className="hint" style={{ marginTop: 0 }}>
-            Free built-in tips from your plan — tap one to open.
+            Free Built-In Tips From Your Plan — Tap One To Open.
           </p>
           <div className="coach-list">
             {COACH_TIPS.map((tip) => {
