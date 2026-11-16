@@ -16,8 +16,7 @@ export function emptyLog(date: string): DayLog {
     skincare: { am: false, pm: false, shower: false },
     supplements: {
       multi: false,
-      d3: false,
-      fishOil: false,
+      immune: false,
       creatine: false,
     },
     waterLiters: 0,
@@ -27,12 +26,32 @@ export function emptyLog(date: string): DayLog {
   }
 }
 
+function normalizeSupplements(raw: unknown): DayLog['supplements'] {
+  const s = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>
+  return {
+    multi: Boolean(s.multi),
+    immune: Boolean(s.immune),
+    creatine: Boolean(s.creatine),
+  }
+}
+
+export function normalizeLog(log: DayLog): DayLog {
+  return {
+    ...log,
+    supplements: normalizeSupplements(log.supplements),
+  }
+}
+
 export function loadData(): AppData {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return { logs: {} }
     const parsed = JSON.parse(raw) as AppData
-    return { logs: parsed.logs ?? {} }
+    const logs: Record<string, DayLog> = {}
+    for (const [k, v] of Object.entries(parsed.logs ?? {})) {
+      logs[k] = normalizeLog(v)
+    }
+    return { logs }
   } catch {
     return { logs: {} }
   }

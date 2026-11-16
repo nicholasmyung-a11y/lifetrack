@@ -12,8 +12,7 @@ export type DayLog = {
   skincare: { am: boolean; pm: boolean; shower: boolean }
   supplements: {
     multi: boolean
-    d3: boolean
-    fishOil: boolean
+    immune: boolean
     creatine: boolean
   }
   waterLiters: number

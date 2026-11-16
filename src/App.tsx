@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { hawaiiDateString, shiftDate, weekdayLabel } from './dates'
-import { emptyLog, loadData, saveData } from './storage'
+import { emptyLog, loadData, normalizeLog, saveData } from './storage'
 import {
   loadLocalUpdatedAt,
   loadSyncCode,
@@ -35,7 +35,7 @@ export default function App() {
   const updatedAtRef = useRef(loadLocalUpdatedAt())
   const skipNextPush = useRef(false)
 
-  const log = logs[activeDate] ?? emptyLog(activeDate)
+  const log = normalizeLog(logs[activeDate] ?? emptyLog(activeDate))
   const weekday = weekdayLabel(activeDate)
   const isToday = activeDate === today
   const isPc = useMemo(
@@ -195,8 +195,7 @@ export default function App() {
     Number(log.meals.breakfast) + Number(log.meals.lunch) + Number(log.meals.dinner)
   const suppCount =
     Number(log.supplements.multi) +
-    Number(log.supplements.d3) +
-    Number(log.supplements.fishOil) +
+    Number(log.supplements.immune) +
     Number(log.supplements.creatine)
   const studyCount = countTrue(log.study)
   const skinCount =
@@ -473,26 +472,32 @@ export default function App() {
             <h2>Supplements</h2>
             {(
               [
-                ['multi', 'Multivitamin'],
-                ['d3', 'Vitamin D3'],
-                ['fishOil', 'Fish Oil'],
+                ['multi', 'Multivitamin (1 tablet)'],
+                ['immune', 'Immune Softgels (optional)'],
                 ['creatine', 'Creatine 3–5g'],
               ] as const
             ).map(([key, label]) => (
               <label key={key} className={`check ${log.supplements[key] ? 'done' : ''}`}>
                 <input
                   type="checkbox"
-                  checked={log.supplements[key]}
+                  checked={Boolean(log.supplements[key])}
                   onChange={(e) =>
                     updateLog({
-                      supplements: { ...log.supplements, [key]: e.target.checked },
+                      supplements: {
+                        multi: Boolean(log.supplements.multi),
+                        immune: Boolean(log.supplements.immune),
+                        creatine: Boolean(log.supplements.creatine),
+                        [key]: e.target.checked,
+                      },
                     })
                   }
                 />
                 <span>{label}</span>
               </label>
             ))}
-            <p className="hint">Turmeric paused · {suppCount}/4 taken</p>
+            <p className="hint">
+              Skip turmeric + test booster · {suppCount}/3 checked
+            </p>
           </section>
 
           <section className="card">
