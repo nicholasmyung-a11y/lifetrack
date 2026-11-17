@@ -219,7 +219,7 @@ export default function App() {
 
   const workoutBlurb =
     log.workout === 'A'
-      ? 'Push-Ups, Shoulder Press, Goblet Squat, RDL'
+      ? 'Push-Ups, Standing Shoulder Press, Goblet Squat, RDL'
       : log.workout === 'B'
         ? 'Rows, Rear-Delt Fly, Lunge/Split Squat, Glute Bridge'
         : log.workout === 'full'
